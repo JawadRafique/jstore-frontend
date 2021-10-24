@@ -1,0 +1,2 @@
+export const stripeApiKey =
+    "pk_test_51JnYV2AOdOb7NUfVpEolZAikQyM2JxXD4TyyF4MjtXOr9G3KAzrK4YGLZ6tglP1J2ePfC18DAJtcc002HINabDUL00CfZPXzx6";

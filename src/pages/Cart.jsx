@@ -11,7 +11,7 @@ import { useHistory } from "react-router";
 import { emptyCart } from "../redux/cartRedux";
 import { CircularProgress } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { stripeApiKey } from "../constant";
+import { stripeApiKey } from "../constant.js";
 
 const Key = stripeApiKey; // Stripe Public API key
 
