@@ -22,27 +22,31 @@ const Wrapper = styled.div`
 
 const ImgContainer = styled.div`
     flex: 1;
+    padding: 2rem;
 `;
 
 const Image = styled.img`
     width: 100%;
-    height: 90vh;
-    object-fit: cover;
+    height: 750px;
+    object-fit: contain;
     ${mobile({ height: "40vh" })}
 `;
 
 const InfoContainer = styled.div`
     flex: 1;
-    padding: 0px 50px;
-    ${mobile({ padding: "10px" })}
+    padding: 2rem 3rem;
+    border: 1px solid;
+    ${mobile({ padding: "10px" })};
 `;
 
 const Title = styled.h1`
-    font-weight: 200;
+    font-weight: 600;
+    font-size: 3rem;
 `;
 
 const Desc = styled.p`
     margin: 20px 0px;
+    font-size: 1.25rem;
 `;
 
 const Price = styled.span`

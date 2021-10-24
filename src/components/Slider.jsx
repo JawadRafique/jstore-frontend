@@ -1,5 +1,6 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { sliderItems } from "../data";
 import { mobile } from "../responsive";
@@ -89,6 +90,16 @@ const Slider = () => {
         }
     };
 
+    const MINUTE_MS = 4500;
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
+        }, MINUTE_MS);
+
+        return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+    }, [slideIndex]);
+
     return (
         <Container>
             <Arrow direction="left" onClick={() => handleClick("left")}>
@@ -103,7 +114,9 @@ const Slider = () => {
                         <InfoContainer>
                             <Title>{item.title}</Title>
                             <Desc>{item.desc}</Desc>
-                            <Button>SHOW NOW</Button>
+                            <Link to={`/products/${item.cat}`}>
+                                <Button>SHOW NOW</Button>
+                            </Link>
                         </InfoContainer>
                     </Slide>
                 ))}

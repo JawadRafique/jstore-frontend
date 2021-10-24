@@ -1,10 +1,14 @@
-import { Badge } from "@material-ui/core";
-import { ShoppingCartOutlined } from "@material-ui/icons";
-import React from "react";
+import { Badge, Menu } from "@material-ui/core";
+import {
+    AccountCircleOutlined,
+    ShoppingCartOutlined,
+} from "@material-ui/icons";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/userRedux";
 
 const Container = styled.div`
     display: flex,
@@ -52,8 +56,44 @@ const MenuItem = styled.div`
     ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
+const UserName = styled.h3`
+    margin-left: 0.5rem;
+    ${mobile({ display: "none" })};
+`;
+
+const UserProfile = styled.div`
+    cursor: pointer;
+    display: flex;
+    position: relative;
+`;
+
+const LogoutButton = styled.h3`
+    position: absolute;
+    top: 35px;
+    background: white;
+    color: #000000;
+    width: 100%;
+    z-index: 3;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+`;
+
 const Navbar = () => {
     const quantity = useSelector((state) => state.cart.quantity);
+    const user = useSelector((state) => state.user.currentUser);
+    const dispatch = useDispatch();
+
+    const [open, setOpen] = useState(false);
+
+    console.log("user", user);
+
+    const handleLogout = () => {
+        dispatch(logoutUser());
+        setOpen(false);
+    };
     return (
         <Container>
             <Wrapper>
@@ -63,8 +103,24 @@ const Navbar = () => {
                     </Link>
                 </Left>
                 <Right>
-                    <MenuItem>REGISTER</MenuItem>
-                    <MenuItem>SIGN IN</MenuItem>
+                    {user ? (
+                        <UserProfile onClick={() => setOpen(!open)}>
+                            <AccountCircleOutlined />
+                            <UserName>
+                                {user.data.username.toUpperCase()}
+                            </UserName>
+                            {open && (
+                                <LogoutButton onClick={handleLogout}>
+                                    Logout
+                                </LogoutButton>
+                            )}
+                        </UserProfile>
+                    ) : (
+                        <>
+                            <MenuItem>REGISTER</MenuItem>
+                            <MenuItem>SIGN IN</MenuItem>
+                        </>
+                    )}
                     <Link to="/cart">
                         <MenuItem>
                             <Badge badgeContent={quantity} color="primary">

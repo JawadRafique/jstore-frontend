@@ -1,6 +1,7 @@
 import { Container, Grid } from "@material-ui/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { popularProducts } from "../data";
 import Product from "./Product";
@@ -12,6 +13,15 @@ import Product from "./Product";
 //     justify-content: space-between;
 // `;
 
+const Button = styled.button`
+    width: 220px;
+    padding: 10px;
+    font-size: 20px;
+    background-color: transparent;
+    cursor: pointer;
+    margin: 2rem 0.5rem;
+`;
+
 const TagHeading = styled.h1`
     font-size: 3rem;
     padding-bottom: 1.25rem;
@@ -21,7 +31,7 @@ const HeadingContainer = styled.div`
     margin: 2rem 0.5rem;
 `;
 
-const Products = ({ cat, filters, sort }) => {
+const Products = ({ cat, filters, sort, homePage }) => {
     console.log("cat", cat, "filters", filters, "sort", sort);
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -72,23 +82,40 @@ const Products = ({ cat, filters, sort }) => {
 
     return (
         <Container>
-            <HeadingContainer>
-                <TagHeading>POPULAR PRODUCTS</TagHeading>
-                <hr></hr>
-            </HeadingContainer>
+            {homePage && (
+                <HeadingContainer>
+                    <TagHeading>POPULAR PRODUCTS</TagHeading>
+                    <hr></hr>
+                </HeadingContainer>
+            )}
             <Grid container alignItems="center" justifyContent="center">
-                {cat
-                    ? filteredProducts.map((item) => (
-                          <Grid item>
-                              <Product item={item} key={item.id} />
-                          </Grid>
-                      ))
-                    : products.slice(0, 8).map((item) => (
-                          <Grid item>
-                              <Product item={item} key={item.id} />
-                          </Grid>
-                      ))}
+                {cat ? (
+                    <>
+                        {filteredProducts.length < 1 ? (
+                            <h3>No Products</h3>
+                        ) : (
+                            filteredProducts.map((item) => (
+                                <Grid item>
+                                    <Product item={item} key={item.id} />
+                                </Grid>
+                            ))
+                        )}
+                    </>
+                ) : (
+                    products.slice(0, 8).map((item) => (
+                        <Grid item>
+                            <Product item={item} key={item.id} />
+                        </Grid>
+                    ))
+                )}
             </Grid>
+            {homePage && (
+                <Grid container alignItems="center" justifyContent="center">
+                    <Link to={`/products/`}>
+                        <Button>See All</Button>
+                    </Link>
+                </Grid>
+            )}
         </Container>
     );
 };

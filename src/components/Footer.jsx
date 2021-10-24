@@ -1,13 +1,16 @@
 import { Container, Grid } from "@material-ui/core";
 import {
     Facebook,
+    GitHub,
     Instagram,
+    LinkedIn,
     MailOutline,
     Phone,
     Pinterest,
     Room,
     Twitter,
 } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 
@@ -71,28 +74,51 @@ const Footer = () => {
                                 believable.
                             </Desc>
                             <SocialContainer>
-                                <SocialIcon color="3B5999">
-                                    <Facebook />
-                                </SocialIcon>
-                                <SocialIcon color="E4405F">
-                                    <Instagram />
-                                </SocialIcon>
-                                <SocialIcon color="55ACEE">
-                                    <Twitter />
-                                </SocialIcon>
-                                <SocialIcon color="E60023">
-                                    <Pinterest />
-                                </SocialIcon>
+                                <Link
+                                    to={{
+                                        pathname:
+                                            "https://www.linkedin.com/in/jawadrafique07/",
+                                    }}
+                                    target="_blank"
+                                >
+                                    <SocialIcon color="3B5999">
+                                        <LinkedIn />
+                                    </SocialIcon>
+                                </Link>
+                                <Link
+                                    to={{
+                                        pathname:
+                                            "https://www.linkedin.com/in/jawadrafique07/",
+                                    }}
+                                    target="_blank"
+                                >
+                                    <SocialIcon color="211F1F">
+                                        <GitHub />
+                                    </SocialIcon>
+                                </Link>
+
+                                <Link
+                                    to={{
+                                        pathname:
+                                            "https://www.hackerrank.com/jawadrafique07",
+                                    }}
+                                    target="_blank"
+                                >
+                                    <SocialIcon>
+                                        <img
+                                            src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg"
+                                            alt="Hacker Rank"
+                                            width="40px"
+                                            height="40px"
+                                        />
+                                    </SocialIcon>
+                                </Link>
                             </SocialContainer>
                         </FooterGrid>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <FooterGrid>
                             <Title>Contact</Title>
-                            <ContactItem>
-                                <Phone style={{ marginRight: "10px" }} /> +1 234
-                                56 78
-                            </ContactItem>
                             <ContactItem>
                                 <MailOutline style={{ marginRight: "10px" }} />
                                 jawadrafique07@gmail.com

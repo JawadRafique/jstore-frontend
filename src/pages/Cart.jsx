@@ -1,10 +1,19 @@
 import { Add, Remove } from "@material-ui/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
+import StripeCheckout from "react-stripe-checkout";
+import { useEffect, useState } from "react";
+import { userRequest } from "../RequestMethods";
+import { useHistory } from "react-router";
+import { emptyCart } from "../redux/cartRedux";
+import { CircularProgress } from "@material-ui/core";
+import { Link } from "react-router-dom";
+
+const Key =
+    "pk_test_51JnYV2AOdOb7NUfVpEolZAikQyM2JxXD4TyyF4MjtXOr9G3KAzrK4YGLZ6tglP1J2ePfC18DAJtcc002HINabDUL00CfZPXzx6";
 
 const Container = styled.div``;
 
@@ -36,7 +45,7 @@ const TopButton = styled.button`
 `;
 
 const TopTexts = styled.div`
-    ${mobile({ display: "none" })}
+    ${mobile({ display: "none" })};
 `;
 const TopText = styled.span`
     text-decoration: underline;
@@ -67,6 +76,7 @@ const ProductDetail = styled.div`
 
 const Image = styled.img`
     width: 200px;
+    object-fit: contain;
 `;
 
 const Details = styled.div`
@@ -151,92 +161,149 @@ const Button = styled.button`
     background-color: black;
     color: white;
     font-weight: 600;
+    cursor: pointer;
 `;
 
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
-    console.log("cartjs", cart);
+    const [stripeToken, setStripeToken] = useState(null);
+    const [paymentLoading, setPaymentLoading] = useState(false);
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+    const onToken = (token) => {
+        setStripeToken(token);
+    };
+
+    useEffect(() => {
+        const paymentRequest = async () => {
+            setPaymentLoading(true);
+            try {
+                const res = await userRequest.post("/checkout/payment", {
+                    tokenId: stripeToken.id,
+                    amount: 400,
+                });
+                console.log("Payment Response", res);
+                history.push("/success", { stripeData: res.data, cart });
+                dispatch(emptyCart());
+            } catch (error) {
+                setPaymentLoading(false);
+            }
+        };
+        stripeToken && cart.total > 0 && paymentRequest();
+    }, [stripeToken, cart.total, history]);
+
     return (
-        <Container>
-            <Navbar />
-            <Wrapper>
-                <Title>YOUR BAG</Title>
-                <Top>
-                    <TopButton>CONTINUE SHOPPING</TopButton>
-                    <TopTexts>
-                        <TopText>Shopping Bag(2)</TopText>
-                        <TopText>Your Wishlist (0)</TopText>
-                    </TopTexts>
-                    <TopButton type="filled">CHECKOUT NOW</TopButton>
-                </Top>
-                <Bottom>
-                    <Info>
-                        {cart.products.map((item) => {
-                            return (
-                                <>
-                                    <Product>
-                                        <ProductDetail>
-                                            <Image src={item.img} />
-                                            <Details>
-                                                <ProductName>
-                                                    <b>Product:</b>
-                                                    {item.title}
-                                                </ProductName>
-                                                <ProductId>
-                                                    <b>ID:</b> {item._id}
-                                                </ProductId>
-                                                <ProductColor
-                                                    color={item.color}
-                                                />
-                                                <ProductSize>
-                                                    <b>Size:</b> {item.size}
-                                                </ProductSize>
-                                            </Details>
-                                        </ProductDetail>
-                                        <PriceDetail>
-                                            <ProductAmountContainer>
-                                                <Remove />
-                                                <ProductAmount>
-                                                    {item.quantity}
-                                                </ProductAmount>
-                                                <Add />
-                                            </ProductAmountContainer>
-                                            <ProductPrice>
-                                                ${item.price * item.quantity}
-                                            </ProductPrice>
-                                        </PriceDetail>
-                                    </Product>
-                                    <Hr />
-                                </>
-                            );
-                        })}
-                    </Info>
-                    <Summary>
-                        <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-                        <SummaryItem>
-                            <SummaryItemText>Subtotal</SummaryItemText>
-                            <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
-                        </SummaryItem>
-                        <SummaryItem>
-                            <SummaryItemText>
-                                Estimated Shipping
-                            </SummaryItemText>
-                            <SummaryItemPrice>$ 5.90</SummaryItemPrice>
-                        </SummaryItem>
-                        <SummaryItem>
-                            <SummaryItemText>Shipping Discount</SummaryItemText>
-                            <SummaryItemPrice>$ -5.90</SummaryItemPrice>
-                        </SummaryItem>
-                        <SummaryItem type="total">
-                            <SummaryItemText>Total</SummaryItemText>
-                            <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
-                        </SummaryItem>
-                        <Button>CHECKOUT NOW</Button>
-                    </Summary>
-                </Bottom>
-            </Wrapper>
-            <Footer />
-        </Container>
+        <>
+            {paymentLoading ? (
+                <CircularProgress />
+            ) : (
+                <Container>
+                    <Navbar />
+                    <Wrapper>
+                        <Title>YOUR BAG</Title>
+                        <Top>
+                            <Link to="/products/">
+                                <TopButton>CONTINUE SHOPPING</TopButton>
+                            </Link>
+                            <TopTexts>
+                                <TopText>Shopping Bag(2)</TopText>
+                                <TopText>Your Wishlist (0)</TopText>
+                            </TopTexts>
+                            {/* <TopButton type="filled">CHECKOUT NOW</TopButton> */}
+                        </Top>
+                        <Bottom>
+                            <Info>
+                                {cart.products.map((item) => {
+                                    return (
+                                        <>
+                                            <Product>
+                                                <ProductDetail>
+                                                    <Image src={item.img} />
+                                                    <Details>
+                                                        <ProductName>
+                                                            <b>Product:</b>
+                                                            {item.title}
+                                                        </ProductName>
+                                                        <ProductId>
+                                                            <b>ID:</b>{" "}
+                                                            {item._id}
+                                                        </ProductId>
+                                                        <ProductColor
+                                                            color={item.color}
+                                                        />
+                                                        <ProductSize>
+                                                            <b>Size:</b>{" "}
+                                                            {item.size}
+                                                        </ProductSize>
+                                                    </Details>
+                                                </ProductDetail>
+                                                <PriceDetail>
+                                                    <ProductAmountContainer>
+                                                        {/* <Remove /> */}
+                                                        <ProductAmount>
+                                                            Quantity:{" "}
+                                                            {item.quantity}
+                                                        </ProductAmount>
+                                                        {/* <Add /> */}
+                                                    </ProductAmountContainer>
+                                                    <ProductPrice>
+                                                        Cost: $
+                                                        {item.price *
+                                                            item.quantity}
+                                                    </ProductPrice>
+                                                </PriceDetail>
+                                            </Product>
+                                            <Hr />
+                                        </>
+                                    );
+                                })}
+                            </Info>
+                            <Summary>
+                                <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+                                <SummaryItem>
+                                    <SummaryItemText>Subtotal</SummaryItemText>
+                                    <SummaryItemPrice>
+                                        $ {cart.total}
+                                    </SummaryItemPrice>
+                                </SummaryItem>
+                                <SummaryItem>
+                                    <SummaryItemText>
+                                        Estimated Shipping
+                                    </SummaryItemText>
+                                    <SummaryItemPrice>$ 5.90</SummaryItemPrice>
+                                </SummaryItem>
+                                <SummaryItem>
+                                    <SummaryItemText>
+                                        Shipping Discount
+                                    </SummaryItemText>
+                                    <SummaryItemPrice>$ -5.90</SummaryItemPrice>
+                                </SummaryItem>
+                                <SummaryItem type="total">
+                                    <SummaryItemText>Total</SummaryItemText>
+                                    <SummaryItemPrice>
+                                        $ {cart.total}
+                                    </SummaryItemPrice>
+                                </SummaryItem>
+                                <StripeCheckout
+                                    name="J Store"
+                                    billingAddress
+                                    shippingAddress
+                                    description={`Your Total is $${cart.total}`}
+                                    amount={cart.total * 100}
+                                    token={onToken}
+                                    stripeKey={Key}
+                                    zipCode={false}
+                                >
+                                    <Button>CHECKOUT NOW</Button>
+                                </StripeCheckout>
+                            </Summary>
+                        </Bottom>
+                    </Wrapper>
+                    <Footer />
+                </Container>
+            )}
+        </>
     );
 };
 
