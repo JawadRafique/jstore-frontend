@@ -11,9 +11,9 @@ import { useHistory } from "react-router";
 import { emptyCart } from "../redux/cartRedux";
 import { CircularProgress } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { stripeApiKey } from "../constant";
 
-const Key =
-    "pk_test_51JnYV2AOdOb7NUfVpEolZAikQyM2JxXD4TyyF4MjtXOr9G3KAzrK4YGLZ6tglP1J2ePfC18DAJtcc002HINabDUL00CfZPXzx6";
+const Key = stripeApiKey; // Stripe Public API key
 
 const Container = styled.div``;
 
