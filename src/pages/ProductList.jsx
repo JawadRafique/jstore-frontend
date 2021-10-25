@@ -7,8 +7,10 @@ import Footer from "../components/Footer";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router";
 import { useState } from "react";
+import { Container, Grid } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
-const Container = styled.div``;
+const Wrapper = styled.div``;
 
 const Title = styled.h1`
     margin: 20px;
@@ -39,6 +41,8 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const ProductList = () => {
+    const classes = useStyles();
+
     const location = useLocation();
     const cat = location.pathname.split("/")[2];
     const [filters, setFilters] = useState({});
@@ -53,48 +57,66 @@ const ProductList = () => {
     };
 
     return (
-        <Container>
+        <Wrapper>
             <Navbar />
-            {cat && <Title>{cat.toUpperCase()}</Title>}
-            <FilterContainer>
-                <Filter>
-                    <FilterText>Filter Products:</FilterText>
-                    <Select name="color" onChange={handleFilters}>
-                        <Option disabled selected>
-                            Color
-                        </Option>
-                        <Option>White</Option>
-                        <Option>Black</Option>
-                        <Option>Red</Option>
-                        <Option>Blue</Option>
-                        <Option>Yellow</Option>
-                        <Option>Green</Option>
-                    </Select>
-                    <Select name="size" onChange={handleFilters}>
-                        <Option disabled selected>
-                            Size
-                        </Option>
-                        <Option>XS</Option>
-                        <Option>S</Option>
-                        <Option>M</Option>
-                        <Option>L</Option>
-                        <Option>XL</Option>
-                    </Select>
-                </Filter>
-                <Filter>
-                    <FilterText>Sort Products:</FilterText>
-                    <Select onChange={(e) => setSort(e.target.value)}>
-                        <Option value="newest">Newest</Option>
-                        <Option value="asc">Price (asc)</Option>
-                        <Option value="desc">Price (desc)</Option>
-                    </Select>
-                </Filter>
-            </FilterContainer>
+            <Container>
+                {cat && <Title>{cat.toUpperCase()}</Title>}
+                <Grid
+                    container
+                    alignItems="center"
+                    justifyContent="space-between"
+                    className={classes.FilterContainer}
+                >
+                    <Grid item>
+                        <Filter>
+                            <FilterText>Filter Products:</FilterText>
+                            <Select name="color" onChange={handleFilters}>
+                                <Option disabled selected>
+                                    Color
+                                </Option>
+                                <Option>White</Option>
+                                <Option>Black</Option>
+                                <Option>Red</Option>
+                                <Option>Blue</Option>
+                                <Option>Yellow</Option>
+                                <Option>Green</Option>
+                            </Select>
+                            <Select name="size" onChange={handleFilters}>
+                                <Option disabled selected>
+                                    Size
+                                </Option>
+                                <Option>XS</Option>
+                                <Option>S</Option>
+                                <Option>M</Option>
+                                <Option>L</Option>
+                                <Option>XL</Option>
+                            </Select>
+                        </Filter>
+                    </Grid>
+                    <Grid item>
+                        <Filter>
+                            <FilterText>Sort Products:</FilterText>
+                            <Select onChange={(e) => setSort(e.target.value)}>
+                                <Option value="newest">Newest</Option>
+                                <Option value="asc">Price (asc)</Option>
+                                <Option value="desc">Price (desc)</Option>
+                            </Select>
+                        </Filter>
+                    </Grid>
+                </Grid>
+            </Container>
             <Products cat={cat} filters={filters} sort={sort} />
             <Newsletter />
             <Footer />
-        </Container>
+        </Wrapper>
     );
 };
+
+const useStyles = makeStyles({
+    FilterContainer: {
+        border: "1px solid",
+        marginBottom: "2rem",
+    },
+});
 
 export default ProductList;

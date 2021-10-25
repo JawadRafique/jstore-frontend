@@ -5,7 +5,7 @@ import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
 import { mobile } from "../responsive";
 import { useState } from "react";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, makeStyles } from "@material-ui/core";
 
 const Wrapper = styled.div``;
 
@@ -34,6 +34,8 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const AllProduct = () => {
+    const classes = useStyles();
+
     const [filters, setFilters] = useState({});
     const [sort, setSort] = useState("newest");
 
@@ -53,6 +55,7 @@ const AllProduct = () => {
                     container
                     alignItems="center"
                     justifyContent="space-between"
+                    className={classes.FilterContainer}
                 >
                     <Grid item>
                         <Filter>
@@ -98,5 +101,13 @@ const AllProduct = () => {
         </Wrapper>
     );
 };
+
+const useStyles = makeStyles({
+    FilterContainer: {
+        border: "1px solid",
+        marginBottom: "2rem",
+        marginTop: "2rem",
+    },
+});
 
 export default AllProduct;

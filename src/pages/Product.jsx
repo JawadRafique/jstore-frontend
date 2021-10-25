@@ -15,7 +15,10 @@ import { addProduct } from "../redux/cartRedux";
 const Container = styled.div``;
 
 const Wrapper = styled.div`
-    padding: 50px;
+    max-width: 1280px;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin: 3rem auto;
     display: flex;
     ${mobile({ padding: "10px", flexDirection: "column" })}
 `;
@@ -27,7 +30,7 @@ const ImgContainer = styled.div`
 
 const Image = styled.img`
     width: 100%;
-    height: 750px;
+    height: 420px;
     object-fit: contain;
     ${mobile({ height: "40vh" })}
 `;
@@ -116,13 +119,10 @@ const Amount = styled.span`
 const Button = styled.button`
     padding: 15px;
     border: 2px solid teal;
-    background-color: white;
+    background-color: #000;
+    color: #fff;
     cursor: pointer;
     font-weight: 500;
-
-    &:hover {
-        background-color: #f8f4f4;
-    }
 `;
 
 const Product = () => {
@@ -141,6 +141,8 @@ const Product = () => {
             try {
                 const res = await publicRequest.get("/products/find/" + id);
                 setProduct(res.data);
+                setColor(res.data.color[0]);
+                setSize(res.data.size[0]);
             } catch (error) {
                 console.log("Something went Wrong", "Error: ", error);
             }
@@ -186,6 +188,7 @@ const Product = () => {
                                     <FilterColor
                                         color={c}
                                         key={c}
+                                        selected={0}
                                         onChange={() => setColor(c)}
                                     />
                                 );
