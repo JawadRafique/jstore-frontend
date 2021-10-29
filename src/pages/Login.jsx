@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/apiCalls";
+import { Link } from "react-router-dom";
+import { ArrowBack } from "@material-ui/icons";
 
 const Container = styled.div`
     width: 100vw;
@@ -57,7 +59,7 @@ const Button = styled.button`
     }
 `;
 
-const Link = styled.a`
+const OtherLink = styled.a`
     margin: 5px 0px;
     font-size: 12px;
     text-decoration: underline;
@@ -66,6 +68,14 @@ const Link = styled.a`
 
 const Error = styled.span`
     color: red;
+`;
+
+const HomeButton = styled.a`
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    margin-bottom: 8px;
 `;
 
 const Login = () => {
@@ -83,6 +93,11 @@ const Login = () => {
     return (
         <Container>
             <Wrapper>
+                <Link to="/">
+                    <HomeButton>
+                        <ArrowBack /> Home
+                    </HomeButton>
+                </Link>
                 <Title>SIGN IN</Title>
                 <Form>
                     <Input
@@ -98,8 +113,8 @@ const Login = () => {
                     <Button onClick={handleLogin} disabled={isFetching}>
                         LOGIN
                     </Button>
-                    <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-                    <Link>CREATE A NEW ACCOUNT</Link>
+                    <OtherLink>DO NOT YOU REMEMBER THE PASSWORD?</OtherLink>
+                    <OtherLink>CREATE A NEW ACCOUNT</OtherLink>
                 </Form>
             </Wrapper>
         </Container>
