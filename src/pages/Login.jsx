@@ -109,7 +109,7 @@ const Login = () => {
                         placeholder="password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    {error && <Error>Something went wrong ...</Error>}
+                    {/* {error && <Error>Something went wrong ...</Error>} */}
                     <Button onClick={handleLogin} disabled={isFetching}>
                         LOGIN
                     </Button>

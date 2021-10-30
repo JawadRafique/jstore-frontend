@@ -106,8 +106,16 @@ const Register = () => {
 
     const onSubmit = async (data) => {
         const registerUser = await JSON.stringify(data);
-        console.log("registerUser", registerUser);
-        await userRegistration(dispatch, registerUser);
+        console.log("registerUser", {
+            username: registerUser.username,
+            email: registerUser.email,
+            password: registerUser.password,
+        });
+        await userRegistration(dispatch, {
+            username: registerUser.username,
+            email: registerUser.email,
+            password: registerUser.password,
+        });
     };
 
     return (

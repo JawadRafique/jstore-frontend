@@ -22,7 +22,11 @@ export const userRegistration = async (dispatch, user) => {
     dispatch(registerStart());
     try {
         console.log("User Data before sending", user);
-        const res = await publicRequest.post("/auth/register", user);
+        const res = await publicRequest.post("/auth/register", {
+            username: user.username,
+            email: user.email,
+            password: user.password,
+        });
         console.log("User response", res.data);
         // dispatch(registerSuccess(res.data));
     } catch (err) {
