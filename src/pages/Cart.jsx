@@ -183,7 +183,6 @@ const Cart = () => {
                     tokenId: stripeToken.id,
                     amount: 400,
                 });
-                console.log("Payment Response", res);
                 history.push("/success", { stripeData: res.data, cart });
                 dispatch(emptyCart());
             } catch (error) {

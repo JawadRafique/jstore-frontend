@@ -17,12 +17,15 @@ import Cart from "./pages/Cart";
 import Success from "./pages/Success";
 import AllProduct from "./pages/AllProduct";
 import ScrollToTop from "./ScrollToTop";
+import { Loader } from "./components/Loader";
 
 const App = () => {
     const user = useSelector((state) => state.user.currentUser);
+    const test = true;
     return (
         <Router>
             <ScrollToTop />
+            {user && user.isFetching && <Loader />}
             <Switch>
                 <Route exact path="/">
                     <Home />

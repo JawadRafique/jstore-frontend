@@ -88,8 +88,6 @@ const Navbar = () => {
 
     const [open, setOpen] = useState(false);
 
-    console.log("user", user);
-
     const handleLogout = () => {
         dispatch(logoutUser());
         setOpen(false);

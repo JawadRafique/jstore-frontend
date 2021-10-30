@@ -18,17 +18,21 @@ export const userLogin = async (dispatch, user) => {
     }
 };
 
-export const userRegistration = async (dispatch, user) => {
+export const userRegistration = async (dispatch, regUser) => {
     dispatch(registerStart());
     try {
-        console.log("User Data before sending", user);
-        const res = await publicRequest.post("/auth/register", {
-            username: user.username,
-            email: user.email,
-            password: user.password,
-        });
-        console.log("User response", res.data);
-        // dispatch(registerSuccess(res.data));
+        await publicRequest.post("/auth/register", regUser);
+        dispatch(registerSuccess());
+        await userLogin(dispatch, {
+            username: regUser.username,
+            password: regUser.password,
+        })
+            .then((result) => {
+                dispatch(loginSuccess(result.data));
+            })
+            .catch(() => {
+                dispatch(loginFailure());
+            });
     } catch (err) {
         dispatch(registerFailure());
     }

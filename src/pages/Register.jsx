@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { userRegistration } from "../redux/apiCalls";
+import { userLogin, userRegistration } from "../redux/apiCalls";
 
 const Container = styled.div`
     width: 100vw;
@@ -102,20 +102,8 @@ const Register = () => {
         formState: { errors },
     } = useForm();
 
-    console.log(watch("example")); // watch input value by passing the name of it
-
     const onSubmit = async (data) => {
-        const registerUser = await JSON.stringify(data);
-        console.log("registerUser", {
-            username: registerUser.username,
-            email: registerUser.email,
-            password: registerUser.password,
-        });
-        await userRegistration(dispatch, {
-            username: registerUser.username,
-            email: registerUser.email,
-            password: registerUser.password,
-        });
+        await userRegistration(dispatch, data);
     };
 
     return (

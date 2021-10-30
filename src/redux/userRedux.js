@@ -26,10 +26,9 @@ const userSlice = createSlice({
         registerStart: (state) => {
             state.isFetching = true;
         },
-        registerSuccess: (state, action) => {
+        registerSuccess: (state) => {
             state.error = false;
             state.isFetching = false;
-            state.currentUser = action.payload;
         },
         registerFailure: (state) => {
             state.isFetching = false;

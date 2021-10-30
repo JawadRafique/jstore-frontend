@@ -32,7 +32,6 @@ const HeadingContainer = styled.div`
 `;
 
 const Products = ({ cat, filters, sort, homePage }) => {
-    console.log("cat", cat, "filters", filters, "sort", sort);
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -45,10 +44,7 @@ const Products = ({ cat, filters, sort, homePage }) => {
                         : `https://api-jstore-app.herokuapp.com/products/`
                 );
                 setProducts(res.data);
-                console.log(res);
-            } catch (error) {
-                console.log(error);
-            }
+            } catch (error) {}
         };
         getProducts();
     }, [cat]);
@@ -63,7 +59,6 @@ const Products = ({ cat, filters, sort, homePage }) => {
                 )
             );
     }, [products, cat, filters]);
-    console.log("filteredProducts", filteredProducts);
     useEffect(() => {
         if (sort === "newest") {
             setFilteredProducts((prev) =>
