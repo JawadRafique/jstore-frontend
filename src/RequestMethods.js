@@ -10,8 +10,13 @@ const getToken = async () => {
     const localUser = await JSON.parse(
         window.localStorage.getItem("persist:root")
     );
-    const userToken = await JSON.parse(localUser.user).currentUser.Token;
-    return userToken;
+    const user = JSON.parse(localUser.user);
+    if (user.currentUser) {
+        const userToken = await user.currentUser.Token;
+        return userToken;
+    } else {
+        return "";
+    }
 };
 
 export const publicRequest = axios.create({
