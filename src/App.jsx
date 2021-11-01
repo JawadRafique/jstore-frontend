@@ -21,7 +21,6 @@ import { Loader } from "./components/Loader";
 
 const App = () => {
     const user = useSelector((state) => state.user.currentUser);
-    const test = true;
     return (
         <Router>
             <ScrollToTop />

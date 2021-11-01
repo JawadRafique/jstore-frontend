@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { popularProducts } from "../data";
 import Product from "./Product";
+import Skeleton from "@material-ui/lab/Skeleton";
+import { ProductSkeletonLoad } from "./ProductSkeletonLoad";
 
 // const Container = styled.div`
 //     padding: 20px;
@@ -35,8 +37,11 @@ const Products = ({ cat, filters, sort, homePage }) => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
+    const [isFetching, setIsFetching] = useState(false);
+
     useEffect(() => {
         const getProducts = async () => {
+            setIsFetching(true);
             try {
                 const res = await axios.get(
                     cat
@@ -44,7 +49,10 @@ const Products = ({ cat, filters, sort, homePage }) => {
                         : `https://api-jstore-app.herokuapp.com/products/`
                 );
                 setProducts(res.data);
-            } catch (error) {}
+                setIsFetching(false);
+            } catch (error) {
+                setIsFetching(false);
+            }
         };
         getProducts();
     }, [cat]);
@@ -86,7 +94,9 @@ const Products = ({ cat, filters, sort, homePage }) => {
             <Grid container alignItems="center" justifyContent="center">
                 {cat ? (
                     <>
-                        {filteredProducts.length < 1 ? (
+                        {isFetching ? (
+                            <ProductSkeletonLoad />
+                        ) : filteredProducts.length < 1 ? (
                             <h3>No Products</h3>
                         ) : (
                             filteredProducts.map((item) => (
@@ -97,11 +107,26 @@ const Products = ({ cat, filters, sort, homePage }) => {
                         )}
                     </>
                 ) : (
-                    products.slice(0, 8).map((item) => (
-                        <Grid item>
-                            <Product item={item} key={item.id} />
-                        </Grid>
-                    ))
+                    <>
+                        {isFetching ? (
+                            <ProductSkeletonLoad />
+                        ) : (
+                            <>
+                                {products.length < 1 ? (
+                                    <h3>No Products</h3>
+                                ) : (
+                                    products.slice(0, 8).map((item) => (
+                                        <Grid item>
+                                            <Product
+                                                item={item}
+                                                key={item.id}
+                                            />
+                                        </Grid>
+                                    ))
+                                )}
+                            </>
+                        )}
+                    </>
                 )}
             </Grid>
             {homePage && (
