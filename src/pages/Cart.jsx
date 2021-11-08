@@ -175,13 +175,17 @@ const Cart = () => {
         setStripeToken(token);
     };
 
+    const toCents = (value) => {
+        return value * 1000;
+    };
+
     useEffect(() => {
         const paymentRequest = async () => {
             setPaymentLoading(true);
             try {
                 const res = await userRequest.post("/checkout/payment", {
                     tokenId: stripeToken.id,
-                    amount: 400,
+                    amount: toCents(cart.total),
                 });
                 history.push("/success", { stripeData: res.data, cart });
                 dispatch(emptyCart());

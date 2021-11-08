@@ -6,8 +6,7 @@ import { userRequest } from "../RequestMethods";
 
 const Success = () => {
     const location = useLocation();
-    //in Cart.jsx I sent data and cart. Please check that page for the changes.(in video it's only data)
-    const data = location.state.stripeData;
+    const stripeData = location.state.stripeData;
     const cart = location.state.cart;
     const currentUser = useSelector((state) => state.user.currentUser);
     const [orderId, setOrderId] = useState(null);
@@ -15,20 +14,32 @@ const Success = () => {
     useEffect(() => {
         const createOrder = async () => {
             try {
-                const res = await userRequest.post("/orders", {
-                    userId: currentUser._id,
-                    products: cart.products.map((item) => ({
-                        productId: item._id,
-                        quantity: item._quantity,
-                    })),
-                    amount: cart.total,
-                    address: data.billing_details.address,
-                });
+                console.log("Trying Creating order");
+                console.log("stripeData", stripeData);
+                console.log("cart", cart);
+                console.log(
+                    "Current User",
+                    currentUser ? currentUser._id : "Unknown"
+                );
+                const res = await userRequest
+                    .post("/orders", {
+                        userId: currentUser ? currentUser._id : "Unknown",
+                        products: cart.products.map((item) => ({
+                            productId: item._id,
+                            quantity: item._quantity,
+                        })),
+                        amount: cart.total,
+                        address: stripeData.billing_details.address,
+                    })
+                    .then((data) => console.log("order res Data", data))
+                    .catch((err) => console.log("Error or request", err));
+                // .then((data) => console.log("OrderRes Data", data));
                 setOrderId(res.data._id);
+                // console.log("Order created", orderId);
             } catch {}
         };
-        data && createOrder();
-    }, [cart, data, currentUser]);
+        stripeData && createOrder();
+    }, [cart, stripeData, currentUser]);
 
     orderId &&
         setTimeout(function () {

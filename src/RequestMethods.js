@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "https://api-jstore-app.herokuapp.com/";
 const TOKEN =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNmZmYTY0NjEzMTlmMjlmYjZkNDRhOCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzNTAwOTUzMSwiZXhwIjoxNjM1MjY4NzMxfQ.cIJXjvrZZbNv6hKLr_jG-oVxqr-rSkVxuDGMVxo9Wjk";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNmZmYTY0NjEzMTlmMjlmYjZkNDRhOCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzNjM3Njg3MywiZXhwIjoxNjM2NjM2MDczfQ.YrauDYq_K-JysoodoqrFl3nzf1mLkhbzp6ZXq0PROyM";
 
 // const getToken = async () => {
 //     const localUser = await JSON.parse(
