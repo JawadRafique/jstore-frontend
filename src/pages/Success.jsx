@@ -21,12 +21,11 @@ const Success = () => {
                         amount: cart.total,
                         address: stripeData.billing_details.address,
                     })
-                    .then(
-                        await publicRequest
-                            .post("/email", {})
-                            .then(() => console.log("Email sent"))
-                    )
+                    .then()
                     .catch((err) => console.log("Error or request", err));
+                await publicRequest
+                    .post("/email")
+                    .then(() => console.log("Email sent"));
                 setOrderId(res.data._id);
             } catch {}
         };
