@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { userRequest, publicRequest } from "../RequestMethods";
 
 const Success = () => {
+    const history = useHistory();
     const location = useLocation();
     const stripeData = location.state.stripeData;
     const cart = location.state.cart;
@@ -24,7 +25,12 @@ const Success = () => {
                     .then(() => {
                         publicRequest
                             .post("/email")
-                            .then(() => console.log("Email sent"))
+                            .then(() => {
+                                console.log("Email sent");
+                                setTimeout(() => {
+                                    history.push("/");
+                                }, 3000);
+                            })
                             .catch(() => console.log("Something Went wrong"));
                     })
                     .catch((err) => console.log("Error or request", err));
@@ -32,12 +38,8 @@ const Success = () => {
             } catch {}
         };
         stripeData && createOrder();
-    }, [cart, stripeData, currentUser]);
+    }, [cart, stripeData, currentUser, history]);
 
-    // orderId &&
-    //     setTimeout(function () {
-    //         window.location.replace("/");
-    //     }, 5000);
     return (
         <div
             style={{
