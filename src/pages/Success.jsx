@@ -17,19 +17,12 @@ const Success = () => {
                 console.log("Trying Creating order");
                 console.log("stripeData", stripeData);
                 console.log("cart", cart);
-                console.log(
-                    "Current User",
-                    currentUser ? currentUser._id : "Unknown"
-                );
+                const userId = currentUser ? currentUser._id : "Unknown";
+                console.log("Current User", userId);
                 const res = await publicRequest
                     .post("/orders", {
-                        userId: currentUser ? currentUser._id : "Unknown",
-                        products: [
-                            cart.products.map((item) => ({
-                                productId: item._id,
-                                quantity: item._quantity,
-                            })),
-                        ],
+                        userId: "UNKNOWN",
+                        products: cart.products,
                         amount: cart.total,
                         address: stripeData.billing_details.address,
                     })
