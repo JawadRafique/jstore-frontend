@@ -21,21 +21,23 @@ const Success = () => {
                         amount: cart.total,
                         address: stripeData.billing_details.address,
                     })
-                    .then()
+                    .then(() => {
+                        publicRequest
+                            .post("/email")
+                            .then(() => console.log("Email sent"))
+                            .catch(() => console.log("Something Went wrong"));
+                    })
                     .catch((err) => console.log("Error or request", err));
-                await publicRequest
-                    .post("/email")
-                    .then(() => console.log("Email sent"));
                 setOrderId(res.data._id);
             } catch {}
         };
         stripeData && createOrder();
     }, [cart, stripeData, currentUser]);
 
-    orderId &&
-        setTimeout(function () {
-            window.location.replace("/");
-        }, 5000);
+    // orderId &&
+    //     setTimeout(function () {
+    //         window.location.replace("/");
+    //     }, 5000);
     return (
         <div
             style={{
