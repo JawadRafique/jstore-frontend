@@ -14,23 +14,20 @@ const Success = () => {
     useEffect(() => {
         const createOrder = async () => {
             try {
-                console.log("Trying Creating order");
-                console.log("stripeData", stripeData);
-                console.log("cart", cart);
-                const userId = currentUser ? currentUser._id : "Unknown";
-                console.log("Current User", userId);
                 const res = await publicRequest
                     .post("/orders", {
-                        userId: "UNKNOWN",
+                        userId: !currentUser ? "Unknown" : currentUser._id,
                         products: cart.products,
                         amount: cart.total,
                         address: stripeData.billing_details.address,
                     })
-                    .then((data) => console.log("order res Data", data))
+                    .then(
+                        await publicRequest
+                            .post("/email")
+                            .then(() => console.log("Email sent"))
+                    )
                     .catch((err) => console.log("Error or request", err));
-                // .then((data) => console.log("OrderRes Data", data));
                 setOrderId(res.data._id);
-                // console.log("Order created", orderId);
             } catch {}
         };
         stripeData && createOrder();
