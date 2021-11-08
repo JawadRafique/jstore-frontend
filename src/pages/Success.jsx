@@ -23,7 +23,7 @@ const Success = () => {
                     })
                     .then(
                         await publicRequest
-                            .post("/email")
+                            .post("/email", {})
                             .then(() => console.log("Email sent"))
                     )
                     .catch((err) => console.log("Error or request", err));
